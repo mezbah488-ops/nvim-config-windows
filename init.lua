@@ -1,3 +1,34 @@
+-- =========================init
+-- Clipboard setup for Neovim
+-- =========================
+
+-- Use system clipboard for all yank, delete, change, and put operations
+vim.fn.serverstart '\\\\.\\pipe\\nvim-latex'
+vim.opt.clipboard = 'unnamedplus'
+vim.opt.foldmethod = 'expr'
+vim.opt.foldexpr = 'nvim_treesitter#foldexpr()'
+vim.opt.foldenable = false
+
+-- Optional: highlight yanked text briefly for visual feedback
+vim.api.nvim_create_autocmd('TextYankPost', {
+  pattern = '*',
+  callback = function()
+    vim.highlight.on_yank { higroup = 'Visual', timeout = 200 }
+  end,
+})
+
+-- Optional: keybindings to always yank/paste from system clipboard explicitly
+-- (unnecessary if clipboard=unnamedplus works, but can be useful)
+vim.keymap.set('n', '<leader>y', '"+y', { noremap = true, desc = 'Yank to system clipboard' })
+vim.keymap.set('v', '<leader>y', '"+y', { noremap = true, desc = 'Yank selection to system clipboard' })
+vim.keymap.set('n', '<leader>p', '"+p', { noremap = true, desc = 'Paste from system clipboard' })
+vim.keymap.set('v', '<leader>p', '"+p', { noremap = true, desc = 'Paste from system clipboard' })
+-- =========================
+-- Usage:
+-- - Normal yank/paste (yy, yw, p, P) now uses system clipboard
+-- - <leader>y / <leader>p are explicit shortcuts for system clipboard
+-- =========================
+
 --[[
 
 =====================================================================
@@ -91,18 +122,18 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
-vim.g.have_nerd_font = false
+vim.g.have_nerd_font = true
 
 -- [[ Setting options ]]
 -- See `:help vim.o`
 -- NOTE: You can change these options as you wish!
 --  For more options, you can see `:help option-list`
-
+vim.o.autochdir = true
 -- Make line numbers default
 vim.o.number = true
 -- You can also add relative line numbers, to help with jumping.
 --  Experiment for yourself to see if you like it!
--- vim.o.relativenumber = true
+vim.o.relativenumber = true
 
 -- Enable mouse mode, can be useful for resizing splits for example!
 vim.o.mouse = 'a'
@@ -110,19 +141,33 @@ vim.o.mouse = 'a'
 -- Don't show the mode, since it's already in the status line
 vim.o.showmode = false
 
+vim.o.wrap = true
+vim.o.linebreak = true
 -- Sync clipboard between OS and Neovim.
 --  Schedule the setting after `UiEnter` because it can increase startup-time.
 --  Remove this option if you want your OS clipboard to remain independent.
 --  See `:help 'clipboard'`
-vim.schedule(function()
-  vim.o.clipboard = 'unnamedplus'
-end)
+-- vim.schedule(function()
+--  vim.o.clipboard = 'unnamedplus'
+--end)
 
 -- Enable break indent
 vim.o.breakindent = true
 
 -- Save undo history
 vim.o.undofile = true
+
+-- Finer undo control in insert mode
+vim.keymap.set('i', ' ', ' <C-g>u', { noremap = true })
+vim.keymap.set('i', '.', '.<C-g>u', { noremap = true })
+vim.keymap.set('i', '<CR>', '<CR><C-g>u', { noremap = true })
+
+-- Optional: Additional useful undo breaks
+vim.keymap.set('i', ',', ',<C-g>u', { noremap = true })
+vim.keymap.set('i', ';', ';<C-g>u', { noremap = true })
+vim.keymap.set('i', '!', '!<C-g>u', { noremap = true })
+vim.keymap.set('i', '?', '?<C-g>u', { noremap = true })
+vim.keymap.set('v', 'p', '"_dP')
 
 -- Case-insensitive searching UNLESS \C or one or more capital letters in the search term
 vim.o.ignorecase = true
@@ -175,7 +220,8 @@ vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
 -- Diagnostic keymaps
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
-
+-- Open current file in browser
+vim.keymap.set('n', '<leader>o', ':!start %<CR>', { desc = 'Open in browser' })
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
 -- is not what someone will guess without a bit more experience.
@@ -204,7 +250,7 @@ vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper win
 -- vim.keymap.set("n", "<C-S-l>", "<C-w>L", { desc = "Move window to the right" })
 -- vim.keymap.set("n", "<C-S-j>", "<C-w>J", { desc = "Move window to the lower" })
 -- vim.keymap.set("n", "<C-S-k>", "<C-w>K", { desc = "Move window to the upper" })
-
+--
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
 
@@ -216,6 +262,13 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   group = vim.api.nvim_create_augroup('kickstart-highlight-yank', { clear = true }),
   callback = function()
     vim.hl.on_yank()
+  end,
+})
+
+vim.api.nvim_create_autocmd('ColorScheme', {
+  callback = function()
+    vim.api.nvim_set_hl(0, 'Normal', { bg = 'none' })
+    vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'none' })
   end,
 })
 
@@ -252,7 +305,7 @@ require('lazy').setup({
   -- NOTE: Plugins can also be added by using a table,
   -- with the first argument being the link and the following
   -- keys can be used to configure plugin behavior/loading/etc.
-  --
+
   -- Use `opts = {}` to automatically pass options to a plugin's `setup()` function, forcing the plugin to be loaded.
   --
 
@@ -358,6 +411,7 @@ require('lazy').setup({
   --
   -- Use the `dependencies` key to specify the dependencies of a particular plugin
 
+  --
   { -- Fuzzy Finder (files, lsp, etc)
     'nvim-telescope/telescope.nvim',
     event = 'VimEnter',
@@ -377,9 +431,13 @@ require('lazy').setup({
         end,
       },
       { 'nvim-telescope/telescope-ui-select.nvim' },
+      {
+        'nvim-telescope/telescope-file-browser.nvim',
+      },
 
       -- Useful for getting pretty icons, but requires a Nerd Font.
-      { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_font },
+
+      { 'nvim-tree/nvim-web-devicons', lazy = false },
     },
     config = function()
       -- Telescope is a fuzzy finder that comes with a lot of different things that
@@ -404,6 +462,18 @@ require('lazy').setup({
       -- [[ Configure Telescope ]]
       -- See `:help telescope` and `:help telescope.setup()`
       require('telescope').setup {
+        defaults = {
+          winblend = 20, -- scale: 0 = opaque, 100 = fully transparent
+          theme = 'center',
+          sorting_strategy = 'ascending',
+          layout_config = {
+            horizontal = {
+              prompt_position = 'top',
+              preview_width = 0.5,
+            },
+          },
+        },
+
         -- You can put your default mappings / updates / etc. in here
         --  All the info you're looking for is in `:help telescope.setup()`
         --
@@ -415,7 +485,26 @@ require('lazy').setup({
         -- pickers = {}
         extensions = {
           ['ui-select'] = {
-            require('telescope.themes').get_dropdown(),
+            require('telescope.themes').get_cursor { windblend = 10 },
+          },
+
+          file_browser = {
+            hijack_netrw = true,
+            hidden = true, -- show hidden files
+            mappings = {
+              ['i'] = {
+                ['<A-c>'] = require('telescope._extensions.file_browser.actions').create,
+                ['<A-r>'] = require('telescope._extensions.file_browser.actions').rename,
+                ['<A-d>'] = require('telescope._extensions.file_browser.actions').remove,
+                ['<C-h>'] = require('telescope._extensions.file_browser.actions').toggle_hidden,
+              },
+              ['n'] = {
+                c = require('telescope._extensions.file_browser.actions').create,
+                r = require('telescope._extensions.file_browser.actions').rename,
+                d = require('telescope._extensions.file_browser.actions').remove,
+                h = require('telescope._extensions.file_browser.actions').toggle_hidden,
+              },
+            },
           },
         },
       }
@@ -423,6 +512,7 @@ require('lazy').setup({
       -- Enable Telescope extensions if they are installed
       pcall(require('telescope').load_extension, 'fzf')
       pcall(require('telescope').load_extension, 'ui-select')
+      pcall(require('telescope').load_extension, 'file_browser')
 
       -- See `:help telescope.builtin`
       local builtin = require 'telescope.builtin'
@@ -436,6 +526,9 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
       vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
       vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
+      vim.keymap.set('n', '<leader>fb', function()
+        require('telescope').extensions.file_browser.file_browser()
+      end, { desc = 'File Browser' })
 
       -- Slightly advanced example of overriding default behavior and theme
       vim.keymap.set('n', '<leader>/', function()
@@ -447,7 +540,7 @@ require('lazy').setup({
       end, { desc = '[/] Fuzzily search in current buffer' })
 
       -- It's also possible to pass additional configuration options.
-      --  See `:help telescope.builtin.live_grep()` for information about particular keys
+      --  See `:help telescope.builtin.live_gre()` for information about particular keys
       vim.keymap.set('n', '<leader>s/', function()
         builtin.live_grep {
           grep_open_files = true,
@@ -698,6 +791,7 @@ require('lazy').setup({
             },
           },
         },
+        texlab = {},
       }
 
       -- Ensure the servers and tools above are installed
@@ -796,17 +890,32 @@ require('lazy').setup({
           return 'make install_jsregexp'
         end)(),
         dependencies = {
-          -- `friendly-snippets` contains a variety of premade snippets.
+          --   `friendly-snippets` contains a variety of premade snippets.
           --    See the README about individual language/framework/plugin snippets:
           --    https://github.com/rafamadriz/friendly-snippets
-          -- {
-          --   'rafamadriz/friendly-snippets',
-          --   config = function()
-          --     require('luasnip.loaders.from_vscode').lazy_load()
-          --   end,
-          -- },
+          {
+            'rafamadriz/friendly-snippets',
+            config = function()
+              require('luasnip.loaders.from_vscode').lazy_load()
+              require('luasnip.loaders.from_vscode').load {
+                paths = { vim.fn.stdpath 'config' .. '/snippets' },
+              }
+            end,
+          },
         },
-        opts = {},
+        --  opts = {
+        --  snippets = { preset = 'luasnip' },
+
+        -- sources = {
+        --  default = { 'lsp', 'path', 'snippets', 'buffer' },
+        -- },
+        --},
+        -- The following I am adding to extend the latex snippets to markdown as well:
+        config = function()
+          local ls = require 'luasnip'
+          require('luasnip.loaders.from_vscode').lazy_load()
+          ls.filetype_extend('markdown', { 'tex', 'latex' })
+        end,
       },
       'folke/lazydev.nvim',
     },
@@ -836,9 +945,10 @@ require('lazy').setup({
         --
         -- See :h blink-cmp-config-keymap for defining your own keymap
         preset = 'default',
-
         -- For more advanced Luasnip keymaps (e.g. selecting choice nodes, expansion) see:
         --    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps
+        ['<C-j>'] = { 'snippet_forward', 'fallback' },
+        ['<C-k>'] = { 'snippet_backward', 'fallback' },
       },
 
       appearance = {
@@ -850,7 +960,9 @@ require('lazy').setup({
       completion = {
         -- By default, you may press `<c-space>` to show the documentation.
         -- Optionally, set `auto_show = true` to show the documentation after a delay.
+        menu = { auto_show = false },
         documentation = { auto_show = false, auto_show_delay_ms = 500 },
+        trigger = { show_in_snippet = false },
       },
 
       sources = {
@@ -974,17 +1086,28 @@ require('lazy').setup({
   --  Uncomment any of the lines below to enable them (you will need to restart nvim).
   --
   -- require 'kickstart.plugins.debug',
-  -- require 'kickstart.plugins.indent_line',
+  require 'kickstart.plugins.indent_line',
   -- require 'kickstart.plugins.lint',
   -- require 'kickstart.plugins.autopairs',
-  -- require 'kickstart.plugins.neo-tree',
+  require 'kickstart.plugins.neo-tree',
   -- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
-
+  require 'kickstart.plugins.vimtex',
+  require 'kickstart.plugins.catppuccin',
+  -- require 'kickstart.plugins.nvim-orgmode',
+  require 'kickstart.plugins.nvim-autopairs',
+  require 'kickstart.plugins.nvim-cmp',
+  require 'kickstart.plugins.markdown-preview',
+  require 'kickstart.plugins.flash',
+  require 'kickstart.plugins.aerial',
+  require 'kickstart.plugins.twilight',
+  require 'kickstart.plugins.zen-mode',
+  require 'kickstart.plugins.toggleterm',
+  --require 'kickstart.plugins.true-zen',
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    This is the easiest way to modularize your config.
   --
   --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
-  -- { import = 'custom.plugins' },
+  { import = 'custom.plugins' },
   --
   -- For additional information with loading, sourcing and examples see `:help lazy.nvim-🔌-plugin-spec`
   -- Or use telescope!
@@ -1014,3 +1137,35 @@ require('lazy').setup({
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
+--
+--
+-- always show tabline
+vim.o.showtabline = 2
+
+-- For inkscape workflow:
+vim.api.nvim_create_autocmd('BufReadPost', {
+  pattern = '*.tex',
+  callback = function()
+    local dir = vim.fn.expand '%:p:h'
+
+    -- Absolute path to your fig.bat
+    local fig_path = 'C:\\Users\\Mezbah\\inkscape-figures\\fig.bat'
+
+    -- 1. Open the terminal window at the bottom
+    vim.cmd 'split | term'
+    vim.cmd 'resize 5' -- Keeps it small and out of the way
+
+    -- 2. Construct the command:
+    -- We use 'call' to ensure the batch file keeps running
+    -- \13 is the 'Enter' key to execute the command string
+    local cmd = string.format('cd /d %s && call "%s" init && call "%s" start\13', vim.fn.shellescape(dir), fig_path, fig_path)
+
+    -- 3. Send the keys to the terminal buffer
+    vim.fn.chansend(vim.b.terminal_job_id, cmd)
+
+    -- 4. Jump back to the editor window so you can start typing immediately
+    vim.cmd 'wincmd k'
+
+    print('[fig] Watcher initialized from: ' .. fig_path)
+  end,
+})
