@@ -21,41 +21,153 @@ A personal Neovim configuration for Windows, based on [kickstart.nvim](https://g
 
 ---
 
-## Prerequisites
+## Quick Install (Recommended)
+
+The easiest way to get everything set up is to use the included installer script. It will automatically install any missing dependencies, clone both repos, patch your config, and set up your PowerShell profile — all in one go.
+
+### Step 1 — Download the installer
+
+Clone or download this repo anywhere on your machine. The installer lives at the root:
+
+```
+nvim-config-windows/
+└── install.ps1      ← this is what you run
+```
+
+You can download just the installer directly with:
+
+```powershell
+Invoke-WebRequest -Uri "https://raw.githubusercontent.com/mezbah488-ops/nvim-config-windows/main/install.ps1" -OutFile "install.ps1"
+```
+
+### Step 2 — Open PowerShell as Administrator
+
+Right-click the Start button → **Terminal (Admin)** or **Windows PowerShell (Admin)**.
+
+> The installer needs Administrator privileges to install fonts and write to the Windows registry.
+
+### Step 3 — Navigate to where you saved the installer
+
+```powershell
+cd C:\path\to\wherever\you\saved\it
+```
+
+For example, if you downloaded it to your Downloads folder:
+
+```powershell
+cd $env:USERPROFILE\Downloads
+```
+
+### Step 4 — Run the installer
+
+```powershell
+Set-ExecutionPolicy Bypass -Scope Process -Force
+.\install.ps1
+```
+
+The first line temporarily allows the script to run in your current session only — it does not permanently change your system security settings.
+
+### What the installer does
+
+The installer is smart about what is already on your system. For each tool, it checks first and only installs if it is missing:
+
+| Step | What happens |
+|------|-------------|
+| Check winget | Aborts with a clear message if winget is not available |
+| Git | Installs via winget if not found, skips if already installed |
+| Neovim | Installs via winget if not found, skips if already installed |
+| Python 3 | Installs via winget if not found, skips if already installed |
+| Inkscape | Installs via winget if not found, skips if already installed |
+| MiKTeX | Installs via winget if not found, skips if already installed |
+| watchdog | Installs via pip (required for the figure watcher) |
+| Neovim config | Backs up any existing config, then clones this repo to `%LOCALAPPDATA%\nvim` |
+| inkscape-figures-windows | Asks where you want it installed, then clones it there |
+| Patch init.lua | Automatically updates `fig_path` to match where you installed inkscape-figures |
+| Nerd Font | Downloads and installs JetBrainsMonoNL Nerd Font |
+| PowerShell alias | Adds a `save` alias to your PowerShell profile for quick git commits |
+
+### After the installer finishes
+
+The installer will print a summary of next steps, but in short:
+
+1. **Set the font in Windows Terminal** to `JetBrainsMonoNL Nerd Font`
+2. **(Optional)** Add the Catppuccin Frappe color scheme to Windows Terminal — see the [Colorscheme](#colorscheme) section below
+3. **Open Neovim** — plugins install automatically on first launch:
+   ```powershell
+   nvim
+   ```
+4. **Restart PowerShell** to activate the `save` alias
+5. **In any LaTeX project folder**, initialize the figure workflow:
+   ```powershell
+   fig init
+   fig start
+   ```
+
+---
+
+## Manual Installation
+
+If you prefer to set things up yourself, follow these steps.
+
+### Prerequisites
 
 | Tool | Purpose | Download |
 |------|---------|----------|
 | Neovim 0.9+ | Editor | https://neovim.io |
 | Git | Plugin management | https://git-scm.com |
-| Node.js | Some LSP servers require it | https://nodejs.org |
+| Python 3 | Runs the figure watcher scripts | https://python.org |
+| Inkscape 1.x | Vector drawing + PDF export | https://inkscape.org |
+| MiKTeX or TeX Live | LaTeX compiler | https://miktex.org |
 | A Nerd Font | Icons in the UI | https://www.nerdfonts.com |
-| Windows Terminal | Recommended terminal | Microsoft Store |
 
-This config uses **JetBrainsMonoNL Nerd Font**. Install it from https://www.nerdfonts.com and set it in Windows Terminal.
+Verify everything is on your PATH:
 
----
+```powershell
+nvim --version
+git --version
+python --version
+inkscape --version
+pdflatex --version
+```
 
-## Installation
+Install the Python dependency:
 
-### Step 1 — Back up any existing config
+```powershell
+pip install watchdog
+```
+
+### Clone this repo
+
+Back up any existing Neovim config first:
 
 ```powershell
 mv $env:LOCALAPPDATA\nvim $env:LOCALAPPDATA\nvim.bak
 ```
 
-### Step 2 — Clone this repo
+Then clone:
 
 ```powershell
 git clone https://github.com/mezbah488-ops/nvim-config-windows.git $env:LOCALAPPDATA\nvim
 ```
 
-### Step 3 — Open Neovim
+### Set up inkscape-figures-windows
+
+Follow the full setup guide at:
+👉 **[inkscape-figures-windows](https://github.com/mezbah488-ops/inkscape-figures-windows)**
+
+Then update the path in `init.lua` to match where you installed it:
+
+```lua
+local fig_path = "C:\\Users\\YourName\\inkscape-figures\\fig.bat"
+```
+
+### Open Neovim
 
 ```powershell
 nvim
 ```
 
-[lazy.nvim](https://github.com/folke/lazy.nvim) will automatically install all plugins on first launch. Wait for it to finish, then restart Neovim.
+[lazy.nvim](https://github.com/folke/lazy.nvim) will install all plugins automatically on first launch. Wait for it to finish, then restart Neovim.
 
 ---
 
@@ -66,7 +178,7 @@ This config uses [Catppuccin](https://github.com/catppuccin/catppuccin) with:
 - **Light mode** → Mocha
 - **Dark mode** → Frappe
 
-For the best experience, also install the Catppuccin theme in **Windows Terminal** so the terminal background matches Neovim. Add this to the `"schemes"` array in your Windows Terminal `settings.json`:
+For the best experience, install the Catppuccin theme in **Windows Terminal** so the terminal background matches Neovim. Add this to the `"schemes"` array in your Windows Terminal `settings.json` (`Ctrl+,` → Open JSON file):
 
 ```json
 {
@@ -94,23 +206,7 @@ For the best experience, also install the Catppuccin theme in **Windows Terminal
 }
 ```
 
-Then set `"colorScheme": "Catppuccin Frappe"` in your PowerShell profile entry.
-
----
-
-## Inkscape Figure Workflow
-
-This config includes an autocmd that automatically starts the Inkscape figure watchers whenever you open a `.tex` file. It depends on a companion tool:
-
-👉 **[inkscape-figures-windows](https://github.com/mezbah488-ops/inkscape-figures-windows)**
-
-Follow the setup guide there first, then update the path in `init.lua`:
-
-```lua
-local fig_path = "C:\\Users\\YourName\\inkscape-figures\\fig.bat"
-```
-
-Replace `YourName` with your actual Windows username.
+Then set `"colorScheme": "Catppuccin Frappe"` in your PowerShell profile entry inside `"list"`.
 
 ---
 
@@ -118,11 +214,12 @@ Replace `YourName` with your actual Windows username.
 
 ```
 nvim/
+├── install.ps1                     # Automated installer
 ├── init.lua                        # Entry point
 └── lua/
     ├── custom/
     │   └── plugins/
-    │       └── init.lua            # Your personal plugin additions
+    │       └── init.lua            # Personal plugin additions
     └── kickstart/
         └── plugins/
             ├── catppuccin.lua      # Colorscheme
