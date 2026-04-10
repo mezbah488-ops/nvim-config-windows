@@ -1102,6 +1102,8 @@ require('lazy').setup({
   require 'kickstart.plugins.twilight',
   require 'kickstart.plugins.zen-mode',
   require 'kickstart.plugins.toggleterm',
+  require 'kickstart.plugins.inkscape-figures',
+  --require 'kickstart.plugins.nvim-surround',
   --require 'kickstart.plugins.true-zen',
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    This is the easiest way to modularize your config.
@@ -1141,31 +1143,3 @@ require('lazy').setup({
 --
 -- always show tabline
 vim.o.showtabline = 2
-
--- For inkscape workflow:
-vim.api.nvim_create_autocmd('BufReadPost', {
-  pattern = '*.tex',
-  callback = function()
-    local dir = vim.fn.expand '%:p:h'
-
-    -- Absolute path to your fig.bat
-    local fig_path = 'C:\\Users\\Mezbah\\inkscape-figures\\fig.bat'
-
-    -- 1. Open the terminal window at the bottom
-    vim.cmd 'split | term'
-    vim.cmd 'resize 5' -- Keeps it small and out of the way
-
-    -- 2. Construct the command:
-    -- We use 'call' to ensure the batch file keeps running
-    -- \13 is the 'Enter' key to execute the command string
-    local cmd = string.format('cd /d %s && call "%s" init && call "%s" start\13', vim.fn.shellescape(dir), fig_path, fig_path)
-
-    -- 3. Send the keys to the terminal buffer
-    vim.fn.chansend(vim.b.terminal_job_id, cmd)
-
-    -- 4. Jump back to the editor window so you can start typing immediately
-    vim.cmd 'wincmd k'
-
-    print('[fig] Watcher initialized from: ' .. fig_path)
-  end,
-})
