@@ -1103,6 +1103,7 @@ require('lazy').setup({
   require 'kickstart.plugins.zen-mode',
   require 'kickstart.plugins.toggleterm',
   require 'kickstart.plugins.inkscape-figures',
+  require 'kickstart.plugins.mysite',
   --require 'kickstart.plugins.nvim-surround',
   --require 'kickstart.plugins.true-zen',
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
