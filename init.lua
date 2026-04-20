@@ -23,6 +23,11 @@ vim.keymap.set('n', '<leader>y', '"+y', { noremap = true, desc = 'Yank to system
 vim.keymap.set('v', '<leader>y', '"+y', { noremap = true, desc = 'Yank selection to system clipboard' })
 vim.keymap.set('n', '<leader>p', '"+p', { noremap = true, desc = 'Paste from system clipboard' })
 vim.keymap.set('v', '<leader>p', '"+p', { noremap = true, desc = 'Paste from system clipboard' })
+vim.keymap.set('n', '<leader>cd', function()
+  local dir = vim.fn.expand '%:p:h'
+  vim.fn.setreg('+', dir)
+  vim.notify('Copied: ' .. dir)
+end)
 -- =========================
 -- Usage:
 -- - Normal yank/paste (yy, yw, p, P) now uses system clipboard

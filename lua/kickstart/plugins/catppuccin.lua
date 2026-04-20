@@ -11,7 +11,7 @@ return {
       end
 
       catppuccin.setup {
-        flavour = 'auto',
+        flavour = 'frappe',
         background = { light = 'frappe', dark = 'frappe' },
         transparent_background = false, -- change to true if you want transparency
         float = { transparent = false, solid = true },
