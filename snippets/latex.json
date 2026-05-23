@@ -1,46 +1,58 @@
 {
-	"Preamble": {
+"Preamble": {
     "prefix": "preamble",
     "body": [
         "\\documentclass[11pt,a4paper]{article}",
+        "",
+        "% --- Page layout ---",
         "\\usepackage[margin=1in]{geometry}",
+        "\\usepackage{microtype}",
+        "\\usepackage{fancyhdr}",
+        "\\setlength{\\headheight}{14pt}",
+        "",
+        "% --- Math ---",
         "\\usepackage{amsmath, amssymb, amsfonts}",
         "\\usepackage{amsthm}",
-        "\\newtheorem{theorem}{Theorem}",
         "\\usepackage{mathtools}",
+        "\\usepackage{bbold}",
+        "\\usepackage{slashed}",
+        "\\usepackage{braket}",
+        "\\usepackage{cancel}",
+        "",
+        "% --- Theorems ---",
+        "\\newtheorem{theorem}{Theorem}",
+        "",
+        "% --- Figures ---",
         "\\usepackage{graphicx}",
-        "\\usepackage{microtype}",
         "\\usepackage{float}",
         "\\usepackage{caption}",
         "\\usepackage{wrapfig}",
-        "\\usepackage{soul}",
-        "\\usepackage{cancel}",
-        "\\usepackage{bbold}",
-        "\\usepackage{slashed}",
-        "\\usepackage{tikz}",
-        "\\usetikzlibrary{decorations.pathmorphing}",
-        "\\usepackage{braket}",
-        "\\usepackage{fancyhdr}",
-        "\\setlength{\\headheight}{14pt}",
-        "\\usepackage[colorlinks=true, linkcolor=blue, urlcolor=blue]{hyperref}",
-        "\\usepackage{xurl}",
-        "\\usetikzlibrary{calc,intersections,arrows.meta}",
-        "\\usepackage{pgfplots}",
-        "\\usepgfplotslibrary{fillbetween}",
-        "\\pgfplotsset{compat=1.18}",
         "\\usepackage{import}",
         "\\usepackage{xifthen}",
         "\\usepackage{pdfpages}",
         "\\usepackage{transparent}",
-        "\\newcommand{\\incfig}[2][1]{%",
-        "    \\def\\svgwidth{#1\\columnwidth}",
-        "    \\import{./figures/}{#2.pdf_tex}",
-        "}",
+	"\\newcommand{\\incfig}[2][1]{%",
+	"\\edef\\svgwidth{#1\\columnwidth}",
+	"\\import{./figures/}{#2.pdf_tex}",
+	"}", 
         "\\pdfsuppresswarningpagegroup=1",
+        "",
+        "% --- TikZ & PGF ---",
+        "\\usepackage{tikz}",
+        "\\usetikzlibrary{calc, intersections, arrows.meta, decorations.pathmorphing}",
+        "\\usepackage{pgfplots}",
+        "\\usepgfplotslibrary{fillbetween}",
+        "\\pgfplotsset{compat=1.18}",
+        "",
+        "% --- Misc ---",
+        "\\usepackage{soul}",
+        "\\usepackage[colorlinks=true, linkcolor=blue, urlcolor=blue]{hyperref}",
+        "\\usepackage{xurl}",
         "",
         "\\title{${1:Title}}",
         "\\author{${2:Author}}",
         "\\date{${3:Date}}",
+        "",
         "\\begin{document}",
         "\\maketitle",
         "\\thispagestyle{fancy}",
@@ -53,17 +65,24 @@
         "\\end{document}"
     ],
     "description": "Full LaTeX preamble"
+},	
+	"Incfig inline": {
+    "prefix": "incfiginline",
+    "body": [
+        "\\incfig[${1:2cm}]{${2:figure_name}}"
+    ],
+    "description": "Insert an Inkscape figure inline"
 },
 	"Inkscape Figure": {
     "prefix": "incfig",
     "body": [
         "\\begin{figure}[ht]",
         "\t\\centering",
-        "\t\\incfig[0.5\\columnwidth]{${1:figure_name}}",
-        "\t\\caption{${2:Your caption here}}",
+        "\t\\incfig[${1:0.5}]{${2:figure_name}}",
+        "\t\\caption{${3:Your caption here}}",
         "\\end{figure}"
     ],
-    "description": "Insert Inkscape figure with 0.8 columnwidth"
+    "description": "Insert Inkscape figure, optional arg is a scale factor (0 to 1)"
 },
 	"Exercise (tcolorbox)": {
     "prefix": "ex",
@@ -285,7 +304,7 @@
 },
 	"Math Text": {
     "prefix": "text",
-    "body": "\\text{${1:label}}${0}",
+    "body": "\\text{${1}}${0}",
     "description": "Insert text inside math mode"
 },
 	"Bold": {
@@ -359,17 +378,17 @@
 },
 	"First Bracket (Parentheses)": {
     "prefix": "first",
-    "body": "\\left( ${1:content} \\right)${0}",
+    "body": "\\left( ${1} \\right)${0}",
     "description": "Insert scaling parentheses ( )"
 },
 "Second Bracket (Curly)": {
     "prefix": "second",
-    "body": "\\left\\{ ${1:content} \\right\\}${0}",
+    "body": "\\left\\{ ${1:} \\right\\}${0}",
     "description": "Insert scaling curly braces { }"
 },
 "Third Bracket (Square)": {
     "prefix": "third",
-    "body": "\\left[ ${1:content} \\right]${0}",
+    "body": "\\left[ ${1:} \\right]${0}",
     "description": "Insert scaling square brackets [ ]"
 },
 "First Bracket (Parentheses) [No Scaling]": {
@@ -419,12 +438,12 @@
 },
 	"Feynman Slash": {
     "prefix": "slash",
-    "body": "\\slashed{${1:p}}${0}",
+    "body": "\\slashed{${1}}${0}",
     "description": "Insert Feynman slash notation"
 },
 	"Math Cal": {
     "prefix": "mca",
-    "body": "\\mathcal{${1:L}}${0}",
+    "body": "\\mathcal{${1}}${0}",
     "description": "Insert mathcal (calligraphic) font"
 }, 
 	"Math Bold": {
@@ -571,7 +590,7 @@
     },
     "Bar Notation": {
     "prefix": "bar",
-    "body": "\\bar{${1:x}}$0",
+    "body": "\\bar{${1}}$0",
     "description": "Insert a bar over a symbol (e.g., \\bar{\\Phi})"
     },
     "Partial Derivative": {
@@ -581,7 +600,7 @@
     },
     "Fraction": {
     "prefix": "frac",
-    "body": "\\frac{${1:a}}{${2:b}}$0",
+    "body": "\\frac{$1}{${2:}}$0",
     "description": "Insert a LaTeX fraction"
     },
     "Tilde": {
@@ -591,12 +610,12 @@
     },
     "URL Link": {
     "prefix": "url",
-    "body": "\\url{${1:https://example.com}}",
+    "body": "\\url{${1}}",
     "description": "Insert a plain URL"
     },
     "Hyperlink": {
     "prefix": "href",
-    "body": "\\href{${1:https://example.com}}{${2:text}}",
+    "body": "\\href{${1}}{${2}}",
     "description": "Insert a hyperlink with custom text"
     },
     "Hyperlink with Footnote": {
