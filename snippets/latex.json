@@ -1,4 +1,18 @@
 {
+	"mdframed": {
+    "prefix": "mdframe",
+    "body": [
+        "\\begin{mdframed}",
+        "\t${1}",
+        "\\end{mdframed}"
+    ],
+    "description": "mdframed environment"
+},
+	"Centered Incfig [Half Scale]": {
+    "prefix": "incfig_center",
+    "body": "\\begin{center}\n\t$$\\vcenter{\\hbox{\\scriptsize \\incfig[0.5]{$1}}}$$\n\\end{center}${0}",
+    "description": "Centered half-scale incfig figure"
+},
 "Preamble": {
     "prefix": "preamble",
     "body": [
@@ -66,13 +80,20 @@
     ],
     "description": "Full LaTeX preamble"
 },	
-	"Incfig inline": {
-    "prefix": "incfiginline",
+"textcolor": {
+    "prefix": "color",
     "body": [
-        "\\incfig[${1:2cm}]{${2:figure_name}}"
+        "\\textcolor{${1:red}}{${2}}"
     ],
-    "description": "Insert an Inkscape figure inline"
+    "description": "Colored text with xcolor"
 },
+  "vcenter incfig inline": {
+    "prefix": "incfig_inline",
+    "body": [
+      "$\\vcenter{\\hbox{\\scriptsize \\incfig[0.5]{${1:}}}}$"
+    ],
+    "description": "Inline math vertically centered incfig"
+  },
 	"Inkscape Figure": {
     "prefix": "incfig",
     "body": [
@@ -214,12 +235,12 @@
 },
 	"Limit": {
     "prefix": "lim",
-    "body": "\\lim_{${1:variable} \\to ${2:value}} ${3:expression}${0}",
+    "body": "\\lim_{${1} \\to ${2}} ${3}${0}",
     "description": "Insert limit with variable approaching value"
 },
 	"Expectation Value": {
-    "prefix": "expval",
-    "body": "\\langle ${1:state1} | ${2:operator} | ${3:state2} \\rangle${0}",
+    "prefix": "expectation_value",
+    "body": "\\langle ${1} | ${2} | ${3} \\rangle${0}",
     "description": "Insert expectation value ⟨state1|operator|state2⟩"
 }, 
 	"Expectation Value (Same State)": {
@@ -259,17 +280,17 @@
 },
 	"Bra-Ket Notation": {
     "prefix": "bra",
-    "body": "\\langle ${1:ψ} |",
+    "body": "\\langle ${1} |",
     "description": "Insert bra notation ⟨ψ|"
 },
 "Ket-Ket Notation": {
     "prefix": "ket",
-    "body": "| ${1:ψ} \\rangle",
+    "body": "| ${1} \\rangle",
     "description": "Insert ket notation |ψ⟩"
 },
-"Inner Notation": {
-    "prefix": "inner",
-    "body": "\\langle ${1:ψ} | ${2:φ} \\rangle",
+"Inner Product Notation": {
+    "prefix": "inner_product",
+    "body": "\\langle ${1} | ${2} \\rangle",
     "description": "Insert bra-ket inner product ⟨ψ|φ⟩"
 },
 	"Another Inner Notation": {
@@ -353,10 +374,10 @@
     "description": "Insert inline math mode $ $"
 },
 	"Numbered Equation with Label": {
-    "prefix": "eqlabel",
+    "prefix": "equ",
     "body": [
         "\\begin{equation}",
-        "\t${1:formula} \\label{eq:${2:name}}",
+        "\t${1}",
         "\\end{equation}${0}"
     ],
     "description": "Insert a numbered equation with a reference label"
@@ -377,32 +398,32 @@
     "description": "Insert tilde/proportionality sign"
 },
 	"First Bracket (Parentheses)": {
-    "prefix": "first",
+    "prefix": "fi",
     "body": "\\left( ${1} \\right)${0}",
     "description": "Insert scaling parentheses ( )"
 },
 "Second Bracket (Curly)": {
-    "prefix": "second",
+    "prefix": "se",
     "body": "\\left\\{ ${1:} \\right\\}${0}",
     "description": "Insert scaling curly braces { }"
 },
 "Third Bracket (Square)": {
-    "prefix": "third",
+    "prefix": "th",
     "body": "\\left[ ${1:} \\right]${0}",
     "description": "Insert scaling square brackets [ ]"
 },
 "First Bracket (Parentheses) [No Scaling]": {
-    "prefix": "fir",
+    "prefix": "f",
     "body": "($1)${0}",
     "description": "Standard parentheses ( ) no scaling"
 },
 "Second Bracket (Curly) [No Scaling]": {
-    "prefix": "sec",
-    "body": "\\{$1\\}${0}",
+    "prefix": "s",
+    "body": "{$1}${0}",
     "description": "Standard curly braces { } no scaling"
 },
 "Third Bracket (Square) [No Scaling]": {
-    "prefix": "thir",
+    "prefix": "t",
     "body": "[$1]${0}",
     "description": "Standard square brackets [ ] no scaling"
 },
@@ -417,8 +438,8 @@
     "description": "Insert anti-commutator {A, B}"
 },
     "Equation Reference": {
-    "prefix": "eqr",
-    "body": "Eq.(\\ref{eq:${1:label}})${0}",
+    "prefix": "eq_ref",
+    "body": "Eq.\\eqref{eq:${1:label}}${0}",
     "description": "Insert 'eq. (label)' reference"
 },
 	"Relativistic Energy": {
