@@ -1151,3 +1151,5 @@ require('lazy').setup({
 --
 -- always show tabline
 vim.o.showtabline = 2
+
+

@@ -5,7 +5,7 @@ return {
   init = function()
     vim.g.vimtex_mappings_enabled = 1
     vim.g.vimtex_view_method = 'general'
-    vim.g.vimtex_view_general_viewer = 'C:/Users/Mezbah/AppData/Local/SumatraPDF/SumatraPDF.exe'
+    vim.g.vimtex_view_general_viewer = 'C:/Users/DELL/AppData/Local/SumatraPDF/SumatraPDF.exe'
     vim.g.vimtex_view_general_options = [[-reuse-instance -forward-search @tex @line @pdf]]
     vim.api.nvim_create_autocmd('FileType', {
       pattern = 'tex',
