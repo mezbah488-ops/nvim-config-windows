@@ -1090,16 +1090,16 @@ require('lazy').setup({
   require 'kickstart.plugins.toggleterm',
   require 'kickstart.plugins.inkscape-figures',
   require 'kickstart.plugins.kanagawa',
-  require 'kickstart.plugins.bufferline',
-  --require 'kickstart.plugins.tokyonight',
-  --require 'kickstart.plugins.mysite',
-  --require 'kickstart.plugins.nvim-surround',
-  --require 'kickstart.plugins.true-zen',
-  -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
-  --    This is the easiest way to modularize your config.
-  --
-  --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
-  { import = 'custom.plugins' },
+  require 'kickstart.plugins.bufferline'
+    --require 'kickstart.plugins.tokyonight',
+    --require 'kickstart.plugins.mysite',
+    --require 'kickstart.plugins.nvim-surround',
+    --require 'kickstart.plugins.true-zen',
+    -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
+    --    This is the easiest way to modularize your config.
+    --
+    --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
+    { import = 'custom.plugins' },
   --
   -- For additional information with loading, sourcing and examples see `:help lazy.nvim-🔌-plugin-spec`
   -- Or use telescope!
@@ -1131,5 +1131,3 @@ require('lazy').setup({
 -- vim: ts=2 sts=2 sw=2 et
 --
 --
--- always show tabline
-vim.o.showtabline = 2

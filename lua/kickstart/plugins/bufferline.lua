@@ -16,5 +16,7 @@ return {
   keys = {
     { '<Tab>', '<Cmd>BufferLineCycleNext<CR>', desc = 'Next buffer' },
     { '<S-Tab>', '<Cmd>BufferLineCyclePrev<CR>', desc = 'Prev buffer' },
+    { '<A-h>', '<Cmd>BufferLineMovePrev<CR>', desc = 'Move buffer left' },
+    { '<A-l>', '<Cmd>BufferLineMoveNext<CR>', desc = 'Move buffer right' },
   },
 }
