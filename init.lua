@@ -137,11 +137,11 @@ vim.g.have_nerd_font = true
 --  For more options, you can see `:help option-list`
 vim.o.autochdir = true
 -- Make line numbers default
-vim.o.number = true
+vim.o.number = false
 vim.opt.numberwidth = 1
 -- You can also add relative line numbers, to help with jumping.
 --  Experiment for yourself to see if you like it!
-vim.o.relativenumber = true
+vim.o.relativenumber = false
 
 -- Enable mouse mode, can be useful for resizing splits for example!
 vim.o.mouse = 'a'
@@ -1090,6 +1090,7 @@ require('lazy').setup({
   require 'kickstart.plugins.toggleterm',
   require 'kickstart.plugins.inkscape-figures',
   require 'kickstart.plugins.kanagawa',
+  require 'kickstart.plugins.bufferline',
   --require 'kickstart.plugins.tokyonight',
   --require 'kickstart.plugins.mysite',
   --require 'kickstart.plugins.nvim-surround',
