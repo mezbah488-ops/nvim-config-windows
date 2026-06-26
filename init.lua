@@ -123,11 +123,11 @@ P.S. You can delete this when you're done too. It's your config now! :)
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
-vim.keymap.set('n', '<leader>cd', function()
+vim.keymap.set('n', '<leader>c', function()
   local dir = vim.fn.expand '%:p:h'
   vim.fn.setreg('+', dir)
   print('Copied: ' .. dir)
-end, { noremap = true, nowait = true, desc = 'Copy directory path to clipboard' })
+end, { noremap = true, nowait = true, desc = 'Copy directory path then git push' })
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = true
 
@@ -1132,5 +1132,3 @@ require('lazy').setup({
 --
 -- always show tabline
 vim.o.showtabline = 2
-
-
