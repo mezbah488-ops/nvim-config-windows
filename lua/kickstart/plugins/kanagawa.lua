@@ -25,6 +25,6 @@ return {
         light = 'lotus',
       },
     }
-    vim.cmd 'colorscheme kanagawa-dragon'
+    vim.cmd 'colorscheme quiet'
   end,
 }
