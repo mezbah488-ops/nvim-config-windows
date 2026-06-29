@@ -1082,7 +1082,8 @@ require('lazy').setup({
   -- require 'kickstart.plugins.nvim-orgmode',
   require 'kickstart.plugins.nvim-autopairs',
   require 'kickstart.plugins.nvim-cmp',
-  require 'kickstart.plugins.markdown-preview',
+  --require 'kickstart.plugins.markdown-preview',
+  require 'kickstart.plugins.markdown',
   require 'kickstart.plugins.flash',
   require 'kickstart.plugins.aerial',
   require 'kickstart.plugins.twilight',
@@ -1090,16 +1091,18 @@ require('lazy').setup({
   require 'kickstart.plugins.toggleterm',
   require 'kickstart.plugins.inkscape-figures',
   require 'kickstart.plugins.kanagawa',
-  require 'kickstart.plugins.bufferline'
-    --require 'kickstart.plugins.tokyonight',
-    --require 'kickstart.plugins.mysite',
-    --require 'kickstart.plugins.nvim-surround',
-    --require 'kickstart.plugins.true-zen',
-    -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
-    --    This is the easiest way to modularize your config.
-    --
-    --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
-    { import = 'custom.plugins' },
+  require 'kickstart.plugins.bufferline',
+  require 'kickstart.plugins.alpha',
+  require 'kickstart.plugins.auto-session',
+  --require 'kickstart.plugins.tokyonight',
+  --require 'kickstart.plugins.mysite',
+  --require 'kickstart.plugins.nvim-surround',
+  --require 'kickstart.plugins.true-zen',
+  -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
+  --    This is the easiest way to modularize your config.
+  --
+  --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
+  --{ import = 'custom.plugins' },
   --
   -- For additional information with loading, sourcing and examples see `:help lazy.nvim-🔌-plugin-spec`
   -- Or use telescope!

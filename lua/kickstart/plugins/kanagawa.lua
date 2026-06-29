@@ -25,6 +25,6 @@ return {
         light = 'lotus',
       },
     }
-    vim.cmd 'colorscheme quiet'
+    vim.cmd 'colorscheme miniwinter'
   end,
 }
