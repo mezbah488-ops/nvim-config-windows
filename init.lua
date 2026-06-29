@@ -923,6 +923,13 @@ require('lazy').setup({
           local ls = require 'luasnip'
           require('luasnip.loaders.from_vscode').lazy_load()
           ls.filetype_extend('markdown', { 'tex', 'latex' })
+          -- Enable autosnippets
+          ls.config.set_config { enable_autosnippets = true }
+
+          -- Load Lua snippets
+          require('luasnip.loaders.from_lua').lazy_load {
+            paths = { vim.fn.stdpath 'config' .. '/luasnippets' },
+          }
         end,
       },
       'folke/lazydev.nvim',
