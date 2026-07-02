@@ -1,5 +1,114 @@
+--[[
+================================================================================
+LaTeX Math Snippets (LuaSnip) — Summary
+================================================================================
+All snippets below are regex- or word-triggered autosnippets, most gated by
+`tex.in_mathzone` (only expand inside math mode; a few, like ||, ::, >>, are
+mode-agnostic). Regex-triggered ones capture and re-insert any preceding
+non-alphabetic/non-word character (via `snip.captures[1]`) so the trigger can
+fire immediately after operators, brackets, or spaces without eating them.
+Nodes marked `d(1, get_visual)` will wrap a visual selection if one is active
+when the snippet fires, otherwise drop an empty editable insert node.
+
+--------------------------------------------------------------------------------
+SCRIPTS (super/subscript)
+--------------------------------------------------------------------------------
+  '            after alnum/)/]/}      ->  ^{}          (superscript, visual-aware)
+  ;            after alnum/)/]/}      ->  _{}          (subscript, visual-aware)
+  __           after alnum/)/]/}      ->  ^{}_{}       (super+subscript)
+  sd                                  ->  _{\mathrm{}} (text/roman subscript, visual-aware)
+  "X           after alnum/)/]/}      ->  ^{X}         (single-char superscript shortcut)
+  :X           after alnum/)/]/}      ->  _{X}         (single-char subscript shortcut)
+  ee           after non-letter       ->  e^{}         (Euler's number, visual-aware)
+  00           after letter/)/]/}     ->  _{0}         (zero subscript shortcut)
+  11           after letter/)/]/}     ->  _{-1}        (minus-one subscript shortcut)
+  JJ           after letter/)/]/}     ->  _{j}         (j subscript; avoids "jk" jump-forward key)
+  ++           after letter/)/]/}     ->  ^{+}         (plus superscript shortcut)
+  CC           after letter/)/]/}     ->  ^{\complement} (complement superscript)
+  **           after letter/)/]/}     ->  ^{*}         (conjugate/star superscript)
+
+--------------------------------------------------------------------------------
+VECTORS & MATRICES
+--------------------------------------------------------------------------------
+  vv           after non-letter       ->  \vec{}                (visual-aware)
+  ue           after non-letter       ->  \unitvector_{}        (visual-aware)
+  uv           after non-letter       ->  \uvec{}               (visual-aware)
+  mt           after non-letter       ->  \mat{}                (visual-aware)
+
+--------------------------------------------------------------------------------
+FRACTIONS, ROOTS, MISC WRAPPERS
+--------------------------------------------------------------------------------
+  ff           after non-letter       ->  \frac{}{}     (numerator visual-aware, tab to denom)
+  gg           after non-letter       ->  \ang{}         (angle, visual-aware)
+  aa           after non-letter       ->  \abs{}         (absolute value, visual-aware)
+  sq           after non-backslash    ->  \sqrt{}        (square root, visual-aware)
+  bnn          after non-backslash    ->  \binom{}{}
+  ll           after non-letter/bksl  ->  \log_{}        (log with base subscript)
+  bb           after non-letter       ->  \boxed{}       (visual-aware)
+
+--------------------------------------------------------------------------------
+DERIVATIVES (plain \frac form, no custom macros required)
+--------------------------------------------------------------------------------
+  dV           after non-letter       ->  \frac{d}{d}                    (visual-aware, denom only)
+  dvv          after non-letter       ->  \frac{d}{d}                    (numerator + denominator var)
+  ddv          after non-letter       ->  \frac{d^{n}}{d^{n}}            (nth-order; n auto-mirrored via rep())
+  pV           after non-letter       ->  \frac{\partial}{\partial }     (visual-aware, denom only)
+  pvv          after non-letter       ->  \frac{\partial }{\partial }    (numerator + denominator var)
+  ppv          after non-letter       ->  \frac{\partial^{n}}{\partial ^{n}} (nth-order; n auto-mirrored via rep())
+
+  Tab order for ddv/ppv: order n (tabstop 1) -> numerator var (tabstop 2)
+  -> denominator var (tabstop 3); n is retyped only once and mirrors into
+  both the numerator and denominator exponent via rep(3).
+
+--------------------------------------------------------------------------------
+SUMS & INTEGRALS
+--------------------------------------------------------------------------------
+  sM           after non-letter       ->  \sum_{}
+  smm          after non-letter       ->  \sum_{}^{}
+  intt         after non-letter       ->  \int_{}^{}
+  intf         after non-letter       ->  \int_{\infty}^{\infty}  (fixed, no tabstops)
+
+--------------------------------------------------------------------------------
+STATIC / WORD-TRIGGERED SYMBOLS (no capture group, plain word triggers)
+--------------------------------------------------------------------------------
+  df                                  ->  \diff           (priority 2000, math zone only)
+  in1 / in2 / in3                     ->  \int / \iint / \iiint  (math zone only)
+  oi1 / oi2                           ->  \oint / \oiint  (math zone only)
+  gdd                                 ->  \grad           (math zone only)
+  cll                                 ->  \curl           (math zone only)
+  DI                                  ->  \div            (math zone only)
+  laa                                 ->  \laplacian      (math zone only)
+  ||                                  ->  \parallel       (any mode)
+  cdd                                 ->  \cdots          (any mode)
+  ldd                                 ->  \ldots          (any mode)
+  eqq                                 ->  \equiv          (any mode)
+  stm                                 ->  \setminus       (any mode)
+  sbb                                 ->  \subset         (any mode)
+  px                                  ->  \approx         (math zone only)
+  pt                                  ->  \propto         (math zone only)
+  ::                                  ->  \colon          (any mode)
+  >>                                  ->  \implies        (any mode)
+  ,.                                  ->  \cdot           (any mode)
+  xx                                  ->  \times          (any mode)
+
+================================================================================
+NOTE: `rep(3)` (from luasnip.extras) mirrors the live value of insert node 3
+without creating a second editable field — used to keep the derivative order
+`n` in sync between numerator and denominator in ddv/ppv.
+================================================================================
+--]]
+
+local ls = require 'luasnip'
+local s = ls.snippet
+local i = ls.insert_node
+local t = ls.text_node
+local d = ls.dynamic_node
+local f = ls.function_node
+local fmta = require('luasnip.extras.fmt').fmta
+
 local helpers = dofile(vim.fn.stdpath 'config' .. '/luasnippets/luasnip-helper-funcs.lua')
 local get_visual = helpers.get_visual
+local rep = require('luasnip.extras').rep
 
 -- Math context detection
 local tex = {}
@@ -265,10 +374,11 @@ return {
     }),
     { condition = tex.in_mathzone }
   ),
-  -- DERIVATIVE with denominator only
+
+  -- DERIVATIVE with denominator only: d/dx
   s(
     { trig = '([^%a])dV', wordTrig = false, regTrig = true, snippetType = 'autosnippet' },
-    fmta('<>\\dvOne{<>}', {
+    fmta('<>\\frac{d}{d<>}', {
       f(function(_, snip)
         return snip.captures[1]
       end),
@@ -276,10 +386,10 @@ return {
     }),
     { condition = tex.in_mathzone }
   ),
-  -- DERIVATIVE with numerator and denominator
+  -- DERIVATIVE with numerator and denominator: df/dx
   s(
     { trig = '([^%a])dvv', wordTrig = false, regTrig = true, snippetType = 'autosnippet' },
-    fmta('<>\\dv{<>}{<>}', {
+    fmta('<>\\frac{d<>}{d<>}', {
       f(function(_, snip)
         return snip.captures[1]
       end),
@@ -288,23 +398,24 @@ return {
     }),
     { condition = tex.in_mathzone }
   ),
-  -- DERIVATIVE with numerator, denominator, and higher-order argument
+  -- DERIVATIVE with numerator, denominator, and order: d^n f / dx^n
   s(
     { trig = '([^%a])ddv', wordTrig = false, regTrig = true, snippetType = 'autosnippet' },
-    fmta('<>\\dvN{<>}{<>}{<>}', {
+    fmta('<>\\frac{d^{<>}<>}{d<>^{<>}}', {
       f(function(_, snip)
         return snip.captures[1]
       end),
+      i(3),
       i(1),
       i(2),
-      i(3),
+      rep(3),
     }),
     { condition = tex.in_mathzone }
   ),
-  -- PARTIAL DERIVATIVE with denominator only
+  -- PARTIAL DERIVATIVE with denominator only: ∂/∂x
   s(
     { trig = '([^%a])pV', wordTrig = false, regTrig = true, snippetType = 'autosnippet' },
-    fmta('<>\\pdvOne{<>}', {
+    fmta('<>\\frac{\\partial}{\\partial <>}', {
       f(function(_, snip)
         return snip.captures[1]
       end),
@@ -312,10 +423,10 @@ return {
     }),
     { condition = tex.in_mathzone }
   ),
-  -- PARTIAL DERIVATIVE with numerator and denominator
+  -- PARTIAL DERIVATIVE with numerator and denominator: ∂f/∂x
   s(
     { trig = '([^%a])pvv', wordTrig = false, regTrig = true, snippetType = 'autosnippet' },
-    fmta('<>\\pdv{<>}{<>}', {
+    fmta('<>\\frac{\\partial <>}{\\partial <>}', {
       f(function(_, snip)
         return snip.captures[1]
       end),
@@ -324,16 +435,17 @@ return {
     }),
     { condition = tex.in_mathzone }
   ),
-  -- PARTIAL DERIVATIVE with numerator, denominator, and higher-order argument
+  -- PARTIAL DERIVATIVE with numerator, denominator, and order: ∂^n f / ∂x^n
   s(
     { trig = '([^%a])ppv', wordTrig = false, regTrig = true, snippetType = 'autosnippet' },
-    fmta('<>\\pdvN{<>}{<>}{<>}', {
+    fmta('<>\\frac{\\partial^{<>}<>}{\\partial <>^{<>}}', {
       f(function(_, snip)
         return snip.captures[1]
       end),
+      i(3),
       i(1),
       i(2),
-      i(3),
+      rep(3),
     }),
     { condition = tex.in_mathzone }
   ),
@@ -485,4 +597,60 @@ return {
   s({ trig = 'xx', snippetType = 'autosnippet' }, {
     t '\\times ',
   }),
+  -- LEFT-RIGHT DELIMITER PAIRS
+  -- \left( \right)  -- FIRST BRACKET
+  s(
+    { trig = '([^%a])fb', wordTrig = false, regTrig = true, snippetType = 'autosnippet' },
+    fmta('<>\\left(<>\\right)', {
+      f(function(_, snip)
+        return snip.captures[1]
+      end),
+      d(1, get_visual),
+    }),
+    { condition = tex.in_mathzone }
+  ),
+  -- \left\{ \right\}  -- SECOND BRACKET
+  s(
+    { trig = '([^%a])sb', wordTrig = false, regTrig = true, snippetType = 'autosnippet' },
+    fmta('<>\\left\\{<>\\right\\}', {
+      f(function(_, snip)
+        return snip.captures[1]
+      end),
+      d(1, get_visual),
+    }),
+    { condition = tex.in_mathzone }
+  ),
+  -- \left[ \right]  -- THIRD BRACKET
+  s(
+    { trig = '([^%a])tb', wordTrig = false, regTrig = true, snippetType = 'autosnippet' },
+    fmta('<>\\left[<>\\right]', {
+      f(function(_, snip)
+        return snip.captures[1]
+      end),
+      d(1, get_visual),
+    }),
+    { condition = tex.in_mathzone }
+  ),
+  -- ABSOLUTE VALUE / NORM BARS
+  s(
+    { trig = '([^%a])lv', wordTrig = false, regTrig = true, snippetType = 'autosnippet' },
+    fmta('<>\\left|<>\\right|', {
+      f(function(_, snip)
+        return snip.captures[1]
+      end),
+      d(1, get_visual),
+    }),
+    { condition = tex.in_mathzone }
+  ),
+  -- ANGLE BRACKETS
+  s(
+    { trig = '([^%a])la', wordTrig = false, regTrig = true, snippetType = 'autosnippet' },
+    fmta('<>\\left\\langle<>\\right\\rangle', {
+      f(function(_, snip)
+        return snip.captures[1]
+      end),
+      d(1, get_visual),
+    }),
+    { condition = tex.in_mathzone }
+  ),
 }
