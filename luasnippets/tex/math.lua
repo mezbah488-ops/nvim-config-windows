@@ -653,4 +653,70 @@ return {
     }),
     { condition = tex.in_mathzone }
   ),
+  -- OVERLINE (bar notation)
+  s(
+    { trig = '([^%a])ov', wordTrig = false, regTrig = true, snippetType = 'autosnippet' },
+    fmta('<>\\overline{<>}', {
+      f(function(_, snip)
+        return snip.captures[1]
+      end),
+      d(1, get_visual),
+    }),
+    { condition = tex.in_mathzone }
+  ),
+  -- UNDERLINE
+  s(
+    { trig = '([^%a])un', wordTrig = false, regTrig = true, snippetType = 'autosnippet' },
+    fmta('<>\\underline{<>}', {
+      f(function(_, snip)
+        return snip.captures[1]
+      end),
+      d(1, get_visual),
+    }),
+    { condition = tex.in_mathzone }
+  ),
+  -- HAT ACCENT
+  s(
+    { trig = '([^%a])ha', wordTrig = false, regTrig = true, snippetType = 'autosnippet' },
+    fmta('<>\\hat{<>}', {
+      f(function(_, snip)
+        return snip.captures[1]
+      end),
+      d(1, get_visual),
+    }),
+    { condition = tex.in_mathzone }
+  ),
+  -- TILDE ACCENT
+  s(
+    { trig = '([^%a])td', wordTrig = false, regTrig = true, snippetType = 'autosnippet' },
+    fmta('<>\\tilde{<>}', {
+      f(function(_, snip)
+        return snip.captures[1]
+      end),
+      d(1, get_visual),
+    }),
+    { condition = tex.in_mathzone }
+  ),
+  -- BOLD (mathbf)
+  s(
+    { trig = '([^%a])bf', wordTrig = false, regTrig = true, snippetType = 'autosnippet' },
+    fmta('<>\\mathbf{<>}', {
+      f(function(_, snip)
+        return snip.captures[1]
+      end),
+      d(1, get_visual),
+    }),
+    { condition = tex.in_mathzone }
+  ),
+  -- TEXT WITHIN MATH
+  s(
+    { trig = '([^%a])tx', wordTrig = false, regTrig = true, snippetType = 'autosnippet' },
+    fmta('<>\\text{<>}', {
+      f(function(_, snip)
+        return snip.captures[1]
+      end),
+      d(1, get_visual),
+    }),
+    { condition = tex.in_mathzone }
+  ),
 }

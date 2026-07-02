@@ -1,3 +1,40 @@
+--[[
+================================================================================
+LaTeX Environment/Structure Snippets (LuaSnip)
+================================================================================
+Block-level LaTeX structures (\begin{}...\end{} environments, display-math,
+lists, figures), as opposed to the inline math-symbol snippet file. Most
+gated by `line_begin` (line-start only, since these are structural units).
+
+GENERIC ENVIRONMENTS
+  new   -> \begin{}...\end{}          (name mirrored via rep(1), body visual-aware)
+  n2    -> \begin{}{}...\end{}        (+1 arg, name mirrored, body visual-aware)
+  n3    -> \begin{}{}{}...\end{}      (+2 args, name mirrored, body visual-aware)
+  nt    -> \begin{topic}{}{}...\end{topic}  (custom tcbtheorem env, fixed name)
+
+MATH DISPLAY
+  nn    -> equation* (unnumbered), single tabstop
+  eq    -> equation (numbered), single tabstop
+  ss    -> equation*/split (unnumbered), visual-aware body
+  all   -> align* (unnumbered), single tabstop
+
+LISTS
+  itt   -> itemize, \item, final tabstop  (line_begin)
+  enn   -> enumerate, \item, final tabstop  (NOTE: no line_begin, unlike itt)
+
+INLINE MATH
+  mm    -> $...$  (after non-lowercase char, visual-aware)
+  ^mm   -> $...$  (line-start variant, no capture needed)
+
+FIGURES
+  fig   -> full figure block, 4 tabstops (width, path, caption, label)
+           manual trigger, not autosnippet (avoids misfiring on "fig" substring)
+
+NOTE: rep(1) mirrors the environment name into \end{} without a second
+editable field, so it's typed only once.
+================================================================================
+--]]
+
 local ls = require 'luasnip'
 local s = ls.snippet
 local i = ls.insert_node
@@ -102,6 +139,21 @@ return {
         \begin{equation*}
             <>
         \end{equation*}
+      ]],
+      {
+        i(1),
+      }
+    ),
+    { condition = line_begin }
+  ),
+  -- NUMBERED EQUATION
+  s(
+    { trig = 'eq', snippetType = 'autosnippet' },
+    fmta(
+      [[
+        \begin{equation}
+            <>
+        \end{equation}
       ]],
       {
         i(1),

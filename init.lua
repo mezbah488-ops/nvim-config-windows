@@ -137,11 +137,11 @@ vim.g.have_nerd_font = true
 --  For more options, you can see `:help option-list`
 vim.o.autochdir = true
 -- Make line numbers default
-vim.o.number = false
+vim.o.number = true
 vim.opt.numberwidth = 1
 -- You can also add relative line numbers, to help with jumping.
 --  Experiment for yourself to see if you like it!
-vim.o.relativenumber = false
+vim.o.relativenumber = true
 
 -- Enable mouse mode, can be useful for resizing splits for example!
 vim.o.mouse = 'a'
@@ -924,7 +924,10 @@ require('lazy').setup({
           require('luasnip.loaders.from_vscode').lazy_load()
           ls.filetype_extend('markdown', { 'tex', 'latex' })
           -- Enable autosnippets
-          ls.config.set_config { enable_autosnippets = true }
+          ls.config.set_config {
+            enable_autosnippets = true,
+            store_selection_keys = '<C-f>',
+          }
 
           -- Load Lua snippets
           require('luasnip.loaders.from_lua').lazy_load {
@@ -1081,13 +1084,12 @@ require('lazy').setup({
   -- require 'kickstart.plugins.debug',
   require 'kickstart.plugins.indent_line',
   -- require 'kickstart.plugins.lint',
-  -- require 'kickstart.plugins.autopairs',
   require 'kickstart.plugins.neo-tree',
   -- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
   require 'kickstart.plugins.vimtex',
   -- require 'kickstart.plugins.catppuccin',
   -- require 'kickstart.plugins.nvim-orgmode',
-  require 'kickstart.plugins.nvim-autopairs',
+  -- require 'kickstart.plugins.nvim-autopairs',
   require 'kickstart.plugins.nvim-cmp',
   --require 'kickstart.plugins.markdown-preview',
   require 'kickstart.plugins.markdown',
