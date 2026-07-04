@@ -17,6 +17,6 @@ vim.keymap.set('n', 'k', 'gk', { buffer = true })
 -- vim.opt_local.spell = true
 -- vim.opt_local.spelllang = 'en_us'
 --
--- --conceallevel
--- vim.opt_local.conceallevel = 1
--- vim.opt_local.concealcursor = 'nc' -- conceal even when cursor is on the line, in normal/command mode
+--conceallevel
+vim.opt_local.conceallevel = 2
+--vim.opt_local.concealcursor = 'nc' -- conceal even when cursor is on the line, in normal/command mode

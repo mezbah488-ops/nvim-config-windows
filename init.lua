@@ -6,10 +6,22 @@
 -- Replace your current line 6 with this:
 pcall(vim.fn.serverstart, '\\\\.\\pipe\\nvim-latex')
 vim.opt.clipboard = 'unnamedplus'
+
+--Foldmethod:
 vim.opt.foldmethod = 'expr'
 vim.opt.foldexpr = 'nvim_treesitter#foldexpr()'
 vim.opt.foldenable = false
 
+--Indentation:
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'tex',
+  callback = function()
+    vim.opt_local.shiftwidth = 2
+    vim.opt_local.tabstop = 2
+    vim.opt_local.softtabstop = 2
+    vim.opt_local.expandtab = true
+  end,
+})
 -- Optional: highlight yanked text briefly for visual feedback
 vim.api.nvim_create_autocmd('TextYankPost', {
   pattern = '*',
@@ -123,11 +135,12 @@ P.S. You can delete this when you're done too. It's your config now! :)
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
-vim.keymap.set('n', '<leader>c', function()
+vim.keymap.set('n', '<leader>cp', function()
   local dir = vim.fn.expand '%:p:h'
   vim.fn.setreg('+', dir)
   print('Copied: ' .. dir)
 end, { noremap = true, nowait = true, desc = 'Copy directory path then git push' })
+
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = true
 
@@ -1056,13 +1069,14 @@ require('lazy').setup({
       -- Autoinstall languages that are not installed
       auto_install = true,
       highlight = {
-        enable = false,
+        enable = true,
+        disable = { 'ruby', 'latex' },
         -- Some languages depend on vim's regex highlighting system (such as Ruby) for indent rules.
         --  If you are experiencing weird indenting issues, add the language to
         --  the list of additional_vim_regex_highlighting and disabled languages for indent.
         additional_vim_regex_highlighting = { 'ruby' },
       },
-      indent = { enable = true, disable = { 'ruby' } },
+      indent = { enable = true, disable = { 'ruby', 'latex' } },
     },
     -- There are additional nvim-treesitter modules that you can use to interact
     -- with nvim-treesitter. You should go explore a few and see what interests you:
@@ -1101,8 +1115,9 @@ require('lazy').setup({
   require 'kickstart.plugins.inkscape-figures',
   require 'kickstart.plugins.kanagawa',
   require 'kickstart.plugins.bufferline',
-  require 'kickstart.plugins.alpha',
+  require 'kickstart.plugins.alpha', -- for nice startup
   require 'kickstart.plugins.auto-session',
+  require 'kickstart.plugins.conform', -- used for formatting
   --require 'kickstart.plugins.tokyonight',
   --require 'kickstart.plugins.mysite',
   --require 'kickstart.plugins.nvim-surround',

@@ -7,6 +7,7 @@ return {
     vim.g.vimtex_view_method = 'general'
     vim.g.vimtex_view_general_viewer = 'C:/Users/Mezbah/AppData/Local/SumatraPDF/SumatraPDF.exe'
     vim.g.vimtex_view_general_options = [[-reuse-instance -forward-search @tex @line @pdf]]
+    vim.g.vimtex_fold_enabled = 1
     vim.api.nvim_create_autocmd('FileType', {
       pattern = 'tex',
       callback = function()
@@ -26,7 +27,9 @@ return {
             print('Error writing servername: ' .. err)
           end
         end
-        vim.keymap.set('n', '<leader>ce', '<plug>(vimtex-env-change)', { buffer = true })
+        vim.keymap.set({ 'n', 'x' }, '<leader>ce', '<plug>(vimtex-env-change)', { buffer = true })
+        vim.keymap.set({ 'n', 'x' }, '<leader>cn', '<plug>(vimtex-cmd-create)', { buffer = true })
+        vim.keymap.set('n', '<leader>cd', '<plug>(vimtex-env-delete)', { buffer = true }) -- delete surrounding environment
       end,
     })
   end,

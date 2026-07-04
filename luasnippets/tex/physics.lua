@@ -21,12 +21,12 @@ return {
     { trig = 'incfig_center', snippetType = 'autosnippet' },
     fmta('\\begin{center}\n\t$$\\vcenter{\\hbox{\\scriptsize \\incfig[0.5]{<>}}}$$\n\\end{center}<>', { i(1), i(0) })
   ),
-  s({ trig = 'incfig_inline', snippetType = 'autosnippet' }, fmta('$\\vcenter{\\hbox{\\scriptsize \\incfig[0.5]{<>}}}$', { i(1) })),
+  s({ trig = 'incfig;', snippetType = 'autosnippet' }, fmta('$\\vcenter{\\hbox{\\scriptsize \\incfig[0.5]{<>}}}$', { i(1) })),
   s(
-    { trig = 'incfig', snippetType = 'autosnippet' },
+    { trig = 'fig;', snippetType = 'autosnippet' },
     fmta('\\begin{figure}[ht]\n\t\\centering\n\t\\incfig[<>]{<>}\n\t\\caption{<>}\n\\end{figure}', { i(1), i(2), i(3) })
   ),
-  s({ trig = 'ex', snippetType = 'autosnippet' }, fmta('\\begin{exercise}{<>}{<>}\n\t<>\n\\end{exercise}', { i(1), i(2), i(3) })),
+  s({ trig = 'ex;', snippetType = 'autosnippet' }, fmta('\\begin{exercise}{<>}{<>}\n\t<>\n\\end{exercise}', { i(1), i(2), i(3) })),
   s({ trig = 'exref', snippetType = 'autosnippet' }, fmta('\\ref{ex:<>}', { i(1) })),
   s({ trig = 'ref', snippetType = 'autosnippet' }, fmta('\\ref{<>}', { i(1) })),
   s({ trig = 'mat2', snippetType = 'autosnippet' }, fmta('\\begin{pmatrix}\n<> & <> \\\\\n<> & <>\n\\end{pmatrix}', { i(1), i(2), i(3), i(4) })),
@@ -49,7 +49,7 @@ return {
   s({ trig = 'Rarr', snippetType = 'autosnippet' }, t '\\Rightarrow', { condition = tex.in_mathzone }),
 
   -- TEXT FORMATTING
-  s({ trig = 'it', snippetType = 'autosnippet' }, fmta('\\textit{<>}', { i(1) })),
+  s({ trig = 'italic', snippetType = 'autosnippet' }, fmta('\\textit{<>}', { i(1) })),
 
   -- MISC SYMBOLS
   s({ trig = 'dots', snippetType = 'autosnippet' }, t '\\dots', { condition = tex.in_mathzone }),
@@ -62,7 +62,7 @@ return {
   s({ trig = 'dddot', snippetType = 'autosnippet' }, fmta('\\dddot{<>}', { i(1) }), { condition = tex.in_mathzone }),
   s({ trig = 'check', snippetType = 'autosnippet' }, fmta('\\check{<>}', { i(1) }), { condition = tex.in_mathzone }),
   s({ trig = 'hbar', snippetType = 'autosnippet' }, t '\\hbar', { condition = tex.in_mathzone }),
-  s({ trig = 'partial', snippetType = 'autosnippet' }, t '\\partial', { condition = tex.in_mathzone }),
+  s({ trig = 'par', snippetType = 'autosnippet' }, t '\\partial', { condition = tex.in_mathzone }),
   s({ trig = 'nab', snippetType = 'autosnippet' }, t '\\nabla', { condition = tex.in_mathzone }),
   s({ trig = 'inf', snippetType = 'autosnippet' }, t '\\infty', { condition = tex.in_mathzone }),
   s({ trig = 'pm', snippetType = 'autosnippet' }, t '\\pm', { condition = tex.in_mathzone }),
@@ -93,7 +93,7 @@ return {
   s({ trig = 'spl', snippetType = 'autosnippet' }, fmta('\\begin{split}\n\t<> &= <> \\\\\n\t<>\n\\end{split}', { i(1), i(2), i(0) })),
   s({ trig = 'gat', snippetType = 'autosnippet' }, fmta('\\begin{gather*}\n\t<>\n\\end{gather*}', { i(1) })),
   s(
-    { trig = 'cas', snippetType = 'autosnippet' },
+    { trig = ';case', snippetType = 'autosnippet' },
     fmta('\\begin{cases}\n\t<>, & \\text{if } <> \\\\\n\t<>, & \\text{otherwise}\n\\end{cases}', { i(1), i(2), i(3) })
   ),
   s({ trig = 'eqref', snippetType = 'autosnippet' }, fmta('Eq.\\eqref{eq:<>}', { i(1) })),
@@ -179,7 +179,6 @@ return {
 
   -- INTEGRALS
   s({ trig = 'int', snippetType = 'autosnippet' }, fmta('\\int_{<>}^{<>} <> \\, d<>', { i(1), i(2), i(3), i(4) }), { condition = tex.in_mathzone }),
-  s({ trig = 'defint', snippetType = 'autosnippet' }, fmta('\\int_{<>}^{<>} <> \\, d<>', { i(1), i(2), i(3), i(4) }), { condition = tex.in_mathzone }),
   s({ trig = 'dblint', snippetType = 'autosnippet' }, fmta('\\iint_{<>} <> \\, d<>', { i(1), i(2), i(3) }), { condition = tex.in_mathzone }),
   s({ trig = 'trint', snippetType = 'autosnippet' }, fmta('\\iiint_{<>} <> \\, d<>', { i(1), i(2), i(3) }), { condition = tex.in_mathzone }),
   s({ trig = 'oint', snippetType = 'autosnippet' }, fmta('\\oint_{<>} <> \\, d<>', { i(1), i(2), i(3) }), { condition = tex.in_mathzone }),
