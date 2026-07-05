@@ -349,7 +349,6 @@ return {
     t 'S_B = \\int d^4x \\left[ \\frac{1}{2}(\\partial_\\mu \\phi)^2 + V(\\phi) \\right]',
     { condition = tex.in_mathzone }
   ),
-  s({ trig = 'tunnel', snippetType = 'autosnippet' }, t '\\Gamma \\sim A\\, e^{-B}\\, (1 + \\mathcal{O}(\\hbar))', { condition = tex.in_mathzone }),
   s({ trig = 'nucrate', snippetType = 'autosnippet' }, t '\\frac{\\Gamma}{V} = A\\, e^{-S_E / \\hbar}', { condition = tex.in_mathzone }),
   s({ trig = 'rgrun', snippetType = 'autosnippet' }, fmta('\\mu \\frac{d <>}{d\\mu} = \\beta(<>)', { i(1), rep(1) }), { condition = tex.in_mathzone }),
   s(
@@ -373,4 +372,9 @@ return {
   s({ trig = 'prodd', snippetType = 'autosnippet' }, fmta('\\prod_{<>=<>}^{<>} ', { i(1), i(2), i(3) }), { condition = tex.in_mathzone }),
   s({ trig = 'lim', snippetType = 'autosnippet' }, fmta('\\lim_{<> \\to <>} ', { i(1), i(2) }), { condition = tex.in_mathzone }),
   s({ trig = 'ohbar', snippetType = 'autosnippet' }, fmta('\\mathcal{O}(\\hbar^{<>})', { i(1) }), { condition = tex.in_mathzone }),
+  --
+  -- CHECKMARK (bold)
+  s({ trig = 'done;', snippetType = 'autosnippet' }, t '\\CheckmarkBold'),
+  -- X MARK (crossed out)
+  s({ trig = 'undone;', snippetType = 'autosnippet' }, t '\\XSolidBrush'),
 }
