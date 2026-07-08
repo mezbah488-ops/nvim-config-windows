@@ -18,5 +18,72 @@ vim.keymap.set('n', 'k', 'gk', { buffer = true })
 -- vim.opt_local.spelllang = 'en_us'
 --
 --conceallevel
-vim.opt_local.conceallevel = 2
+-- vim.opt_local.conceallevel = 2
 --vim.opt_local.concealcursor = 'nc' -- conceal even when cursor is on the line, in normal/command mode
+--
+-- after/ftplugin/tex.lua
+-- ... your existing folding/indent settings above ...
+local function luasnip_picker()
+  local pickers = require 'telescope.pickers'
+  local finders = require 'telescope.finders'
+  local conf = require('telescope.config').values
+  local previewers = require 'telescope.previewers'
+  local ls = require 'luasnip'
+  local ft = vim.bo.filetype
+
+  local snippets = ls.get_snippets(ft, { type = 'snippets' }) or {}
+  local autosnippets = ls.get_snippets(ft, { type = 'autosnippets' }) or {}
+
+  local entries = {}
+  for _, list in ipairs { snippets, autosnippets } do
+    for _, snip in ipairs(list) do
+      table.insert(entries, snip)
+    end
+  end
+
+  pickers
+    .new({}, {
+      prompt_title = 'LuaSnip Triggers (' .. ft .. ')',
+      finder = finders.new_table {
+        results = entries,
+        entry_maker = function(snip)
+          local trig = snip.trigger or '?'
+          local name = snip.name or trig
+          return {
+            value = snip,
+            display = string.format('%-25s %s', trig, name),
+            ordinal = trig .. ' ' .. name,
+          }
+        end,
+      },
+      sorter = conf.generic_sorter {},
+      previewer = previewers.new_buffer_previewer {
+        title = 'Expansion Preview',
+        define_preview = function(self, entry)
+          local snip = entry.value
+          local ok, docstring = pcall(function()
+            return snip:get_docstring()
+          end)
+
+          local lines
+          if ok and docstring then
+            if type(docstring) == 'string' then
+              lines = vim.split(docstring, '\n')
+            elseif type(docstring) == 'table' then
+              lines = docstring
+            end
+          end
+
+          if not lines or #lines == 0 then
+            lines = { 'No static preview available (depends on regex captures / dynamic input).' }
+          end
+
+          vim.api.nvim_buf_set_lines(self.state.bufnr, 0, -1, false, lines)
+          vim.bo[self.state.bufnr].filetype = 'tex'
+        end,
+      },
+    })
+    :find()
+end
+
+vim.keymap.set('n', '<leader>cs', luasnip_picker, { buffer = true, desc = 'List LuaSnip triggers' })
