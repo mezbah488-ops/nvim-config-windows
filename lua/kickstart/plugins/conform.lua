@@ -26,7 +26,7 @@ return {
     formatters = {
       ['tex-fmt'] = {
         command = 'tex-fmt',
-        args = { '--stdin', '--tabsize', '4', '--wraplen', '100' },
+        args = { '--stdin', '--tabsize', '4', '--nowrap' },
         stdin = true,
       },
     },

@@ -1103,7 +1103,7 @@ require('lazy').setup({
   require 'kickstart.plugins.vimtex',
   -- require 'kickstart.plugins.catppuccin',
   -- require 'kickstart.plugins.nvim-orgmode',
-  -- require 'kickstart.plugins.nvim-autopairs',
+  require 'kickstart.plugins.nvim-autopairs',
   require 'kickstart.plugins.nvim-cmp',
   --require 'kickstart.plugins.markdown-preview',
   require 'kickstart.plugins.markdown',

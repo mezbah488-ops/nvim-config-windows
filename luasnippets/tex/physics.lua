@@ -28,9 +28,9 @@ return {
   ),
   s({ trig = 'ex;', snippetType = 'autosnippet' }, fmta('\\begin{exercise}{<>}{<>}\n\t<>\n\\end{exercise}', { i(1), i(2), i(3) })),
   s({ trig = 'exref', snippetType = 'autosnippet' }, fmta('\\ref{ex:<>}', { i(1) })),
-  s({ trig = 'ref', snippetType = 'autosnippet' }, fmta('\\ref{<>}', { i(1) })),
+  s({ trig = 'ref;', snippetType = 'autosnippet' }, fmta('\\ref{<>}', { i(1) })),
   s({ trig = 'mat2', snippetType = 'autosnippet' }, fmta('\\begin{pmatrix}\n<> & <> \\\\\n<> & <>\n\\end{pmatrix}', { i(1), i(2), i(3), i(4) })),
-  s({ trig = 'mat', snippetType = 'autosnippet' }, fmta('\\begin{<>matrix}\n\t<>\n\\end{<>matrix}', { i(1), i(2), rep(1) })),
+  s({ trig = 'mt', snippetType = 'autosnippet' }, fmta('\\begin{<>matrix}\n\t<>\n\\end{<>matrix}', { i(1), i(2), rep(1) })),
   s({ trig = 'quad', snippetType = 'autosnippet' }, t '\\quad'),
   s({ trig = 'thm', snippetType = 'autosnippet' }, fmta('\\begin{theorem}[<>]\n\t<>\n\\end{theorem}', { i(1), i(2) })),
   s({ trig = 'bnabla', snippetType = 'autosnippet' }, t '\\boldsymbol{\\nabla}', { condition = tex.in_mathzone }),
@@ -44,14 +44,28 @@ return {
   s({ trig = 'undset', snippetType = 'autosnippet' }, fmta('\\underset{<>}{<>}', { i(1), i(2) }), { condition = tex.in_mathzone }),
 
   -- BRA-KET / PRODUCTS / ARROWS
+  s({ trig = 'expt', snippetType = 'autosnippet' }, fmta('\\langle <> \\rangle', { i(1) }), { condition = tex.in_mathzone }),
   s({ trig = 'ipc', snippetType = 'autosnippet' }, fmta('\\langle <> , <> \\rangle', { i(1), i(2) }), { condition = tex.in_mathzone }),
   s({ trig = 'oprod', snippetType = 'autosnippet' }, fmta('| <> \\rangle \\langle <> |', { i(1), i(2) }), { condition = tex.in_mathzone }),
   s({ trig = 'Rarr', snippetType = 'autosnippet' }, t '\\Rightarrow', { condition = tex.in_mathzone }),
-
-  -- TEXT FORMATTING
+  --
+  -- TEXT FORMATTING:
   s({ trig = 'italic', snippetType = 'autosnippet' }, fmta('\\textit{<>}', { i(1) })),
+  -- BOLD TEXT
+  s({ trig = 'bold', snippetType = 'autosnippet' }, fmta('\\textbf{<>}', { i(1) })),
+  -- EMPHASIS (context-sensitive italics)
+  s({ trig = 'emph;', snippetType = 'autosnippet' }, fmta('\\emph{<>}', { i(1) })),
+  -- UNDERLINE
+  s({ trig = 'underline', snippetType = 'autosnippet' }, fmta('\\underline{<>}', { i(1) })),
+
+  -- COLORED TEXT (requires \usepackage{xcolor})
+  s({ trig = 'cl;', snippetType = 'autosnippet' }, fmta('\\textcolor{<>}{<>}', { i(1, 'red'), i(2) })),
+  -- FOOTNOTE
+  s({ trig = 'fn', snippetType = 'autosnippet' }, fmta('\\footnote{<>}', { i(1) })),
 
   -- MISC SYMBOLS
+  -- TIMES (semicolon-style trigger)
+  s({ trig = 'times', snippetType = 'autosnippet', wordTrig = false }, t '\\times', { condition = tex.in_mathzone }),
   s({ trig = 'dots', snippetType = 'autosnippet' }, t '\\dots', { condition = tex.in_mathzone }),
   s({ trig = 'ord', snippetType = 'autosnippet' }, fmta('\\mathcal{O}(<>)', { i(1) }), { condition = tex.in_mathzone }),
   s({ trig = 'bar', snippetType = 'autosnippet' }, fmta('\\bar{<>}', { i(1) }), { condition = tex.in_mathzone }),
@@ -105,7 +119,7 @@ return {
   s({ trig = 'hreffoot', snippetType = 'autosnippet' }, fmta('\\href{<>}{<>}\\footnote{\\url{<>}}', { i(1), i(2), rep(1) })),
   s({ trig = 'hyperref', snippetType = 'autosnippet' }, fmta('\\hyperref[<>]{<>}', { i(1), i(2) })),
   s({ trig = 'mailto', snippetType = 'autosnippet' }, fmta('\\href{mailto:<>}{<>}', { i(1), i(2) })),
-  s({ trig = 'cite', snippetType = 'autosnippet' }, fmta('\\cite{<>}', { i(1) })),
+  s({ trig = 'cite;', snippetType = 'autosnippet' }, fmta('\\cite{<>}', { i(1) })),
   s({ trig = 'figref', snippetType = 'autosnippet' }, fmta('Fig.~\\ref{fig:<>}', { i(1) })),
   s({ trig = 'tabref', snippetType = 'autosnippet' }, fmta('Table~\\ref{tab:<>}', { i(1) })),
 

@@ -13,6 +13,24 @@ vim.opt_local.breakindent = true -- wrapped lines keep the indent of the origina
 vim.keymap.set('n', 'j', 'gj', { buffer = true })
 vim.keymap.set('n', 'k', 'gk', { buffer = true })
 
+vim.opt.fileencoding = 'utf-8'
+vim.opt.bomb = false
+
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'tex',
+  callback = function(args)
+    vim.keymap.set('n', 'gx', function()
+      local line = vim.api.nvim_get_current_line()
+      local url = line:match '\\href%s*{(.-)}' or line:match '\\url%s*{(.-)}'
+      if url then
+        vim.ui.open(url)
+      else
+        -- fall back to netrw's own logic for non-href lines
+        vim.fn['netrw#BrowseX'](vim.fn['netrw#GX'](), vim.fn['netrw#CheckIfRemote']())
+      end
+    end, { buffer = args.buf, desc = 'Open URL under cursor (tex-aware)' })
+  end,
+})
 -- --spell check
 -- vim.opt_local.spell = true
 -- vim.opt_local.spelllang = 'en_us'
