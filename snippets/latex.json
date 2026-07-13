@@ -1,19 +1,5 @@
 {
-  "mdframed": {
-    "prefix": "mdframe",
-    "body": [
-      "\\begin{mdframed}",
-      "\t${1}",
-      "\\end{mdframed}"
-    ],
-    "description": "mdframed environment"
-  },
-  "Centered Incfig [Half Scale]": {
-    "prefix": "incfig_center",
-    "body": "\\begin{center}\n\t$$\\vcenter{\\hbox{\\scriptsize \\incfig[0.5]{$1}}}$$\n\\end{center}${0}",
-    "description": "Centered half-scale incfig figure"
-  },
-  "Preamble": {
+	"Preamble": {
     "prefix": "preamble",
     "body": [
       "\\documentclass[11pt,a4paper]{article}",
@@ -58,6 +44,10 @@
       "\\usepgfplotslibrary{fillbetween}",
       "\\pgfplotsset{compat=1.18}",
       "",
+      "% --- Bibliography ---",
+      "\\usepackage[backend=biber, style=numeric, sorting=nyt]{biblatex}",
+      "\\addbibresource{${4:references.bib}}",
+      "",
       "% --- Misc ---",
       "\\usepackage{soul}",
       "\\usepackage[colorlinks=true, linkcolor=blue, urlcolor=blue]{hyperref}",
@@ -72,9 +62,25 @@
       "\\tableofcontents",
       "\\newpage",
       "$0",
+      "",
+      "\\printbibliography",
       "\\end{document}"
     ],
     "description": "Full LaTeX preamble"
+  },
+  "mdframed": {
+    "prefix": "mdframe",
+    "body": [
+      "\\begin{mdframed}",
+      "\t${1}",
+      "\\end{mdframed}"
+    ],
+    "description": "mdframed environment"
+  },
+  "Centered Incfig [Half Scale]": {
+    "prefix": "incfig_center",
+    "body": "\\begin{center}\n\t$$\\vcenter{\\hbox{\\scriptsize \\incfig[0.5]{$1}}}$$\n\\end{center}${0}",
+    "description": "Centered half-scale incfig figure"
   },
   "Textcolor": {
     "prefix": "color",

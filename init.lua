@@ -8,9 +8,9 @@ pcall(vim.fn.serverstart, '\\\\.\\pipe\\nvim-latex')
 vim.opt.clipboard = 'unnamedplus'
 
 --Foldmethod:
-vim.opt.foldmethod = 'expr'
-vim.opt.foldexpr = 'nvim_treesitter#foldexpr()'
-vim.opt.foldenable = false
+-- vim.opt.foldmethod = 'expr'
+-- vim.opt.foldexpr = 'nvim_treesitter#foldexpr()'
+-- vim.opt.foldenable = false
 
 --Indentation:
 vim.api.nvim_create_autocmd('FileType', {
@@ -1106,19 +1106,24 @@ require('lazy').setup({
   require 'kickstart.plugins.nvim-autopairs',
   require 'kickstart.plugins.nvim-cmp',
   --require 'kickstart.plugins.markdown-preview',
-  require 'kickstart.plugins.markdown',
+  --require 'kickstart.plugins.markdown',
   require 'kickstart.plugins.flash',
   require 'kickstart.plugins.aerial',
   require 'kickstart.plugins.twilight',
   require 'kickstart.plugins.zen-mode',
   require 'kickstart.plugins.toggleterm',
   require 'kickstart.plugins.inkscape-figures',
-  require 'kickstart.plugins.kanagawa',
+
+  --colorschemes:
+  --require 'kickstart.plugins.kanagawa',
+  require 'kickstart.plugins.gruvbox-material',
+  --require 'kickstart.plugins.tokyonight',
+  --
   require 'kickstart.plugins.bufferline',
   require 'kickstart.plugins.alpha', -- for nice startup
   require 'kickstart.plugins.auto-session',
   require 'kickstart.plugins.conform', -- used for formatting
-  --require 'kickstart.plugins.tokyonight',
+  require 'kickstart.plugins.nvim-ufo', -- computes folds asynchronously
   --require 'kickstart.plugins.mysite',
   --require 'kickstart.plugins.nvim-surround',
   --require 'kickstart.plugins.true-zen',

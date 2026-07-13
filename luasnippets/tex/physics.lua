@@ -223,11 +223,11 @@ return {
   s({ trig = 'covdu', snippetType = 'autosnippet' }, fmta('\\nabla^{<>} ', { i(1) }), { condition = tex.in_mathzone }),
   s({ trig = 'lied', snippetType = 'autosnippet' }, fmta('\\mathcal{L}_{<>} ', { i(1) }), { condition = tex.in_mathzone }),
   s({ trig = 'ddot', snippetType = 'autosnippet' }, fmta('\\ddot{<>}', { i(1) }), { condition = tex.in_mathzone }),
-  s({ trig = 'box', snippetType = 'autosnippet' }, t '\\Box ', { condition = tex.in_mathzone }),
-  s({ trig = 'lap', snippetType = 'autosnippet' }, t '\\nabla^2 ', { condition = tex.in_mathzone }),
-  s({ trig = 'grad', snippetType = 'autosnippet' }, t '\\boldsymbol{\\nabla} ', { condition = tex.in_mathzone }),
+  s({ trig = 'box;', snippetType = 'autosnippet' }, t '\\Box ', { condition = tex.in_mathzone }),
+  s({ trig = 'lap;', snippetType = 'autosnippet' }, t '\\nabla^2 ', { condition = tex.in_mathzone }),
+  s({ trig = 'grad;', snippetType = 'autosnippet' }, t '\\boldsymbol{\\nabla} ', { condition = tex.in_mathzone }),
   s({ trig = 'divv', snippetType = 'autosnippet' }, t '\\boldsymbol{\\nabla} \\cdot ', { condition = tex.in_mathzone }),
-  s({ trig = 'curl', snippetType = 'autosnippet' }, t '\\boldsymbol{\\nabla} \\times ', { condition = tex.in_mathzone }),
+  s({ trig = 'curl;', snippetType = 'autosnippet' }, t '\\boldsymbol{\\nabla} \\times ', { condition = tex.in_mathzone }),
 
   -- TENSOR INDICES
   s({ trig = 'uu', snippetType = 'autosnippet' }, fmta('^{<>}', { i(1) }), { condition = tex.in_mathzone }),
