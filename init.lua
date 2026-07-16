@@ -1120,7 +1120,7 @@ require('lazy').setup({
   --require 'kickstart.plugins.tokyonight',
   --
   require 'kickstart.plugins.bufferline',
-  require 'kickstart.plugins.alpha', -- for nice startup
+  --require 'kickstart.plugins.alpha', -- for nice startup
   require 'kickstart.plugins.auto-session',
   require 'kickstart.plugins.conform', -- used for formatting
   require 'kickstart.plugins.nvim-ufo', -- computes folds asynchronously
